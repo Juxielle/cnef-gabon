@@ -43,7 +43,7 @@ class VeilleInnovationController extends CrudController
             ['name' => 'titre', 'label' => 'Titre', 'type' => 'text', 'required' => true, 'full' => true],
             ['name' => 'resume', 'label' => 'Résumé', 'type' => 'textarea', 'required' => true, 'full' => true],
             ['name' => 'pertinence_afrique', 'label' => 'Pertinence Gabon / Afrique', 'type' => 'textarea', 'full' => true],
-            ['name' => 'tags', 'label' => 'Tags (JSON)', 'type' => 'json', 'full' => true, 'help' => 'Ex : ["Fintech","Inclusion"]'],
+            ['name' => 'tags', 'label' => 'Tags', 'type' => 'list', 'full' => true, 'add_label' => 'Ajouter un tag', 'placeholder' => 'Ex. Fintech'],
         ];
     }
 
@@ -59,7 +59,8 @@ class VeilleInnovationController extends CrudController
             'titre' => ['required', 'string'],
             'resume' => ['required', 'string'],
             'pertinence_afrique' => ['nullable', 'string'],
-            'tags' => ['nullable', 'json'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['nullable', 'string', 'max:50'],
         ];
     }
 }

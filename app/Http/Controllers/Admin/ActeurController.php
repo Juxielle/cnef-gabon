@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Acteur;
+use App\Rules\SafeSvg;
 use Illuminate\Database\Eloquent\Model;
 
 class ActeurController extends CrudController
@@ -35,7 +36,7 @@ class ActeurController extends CrudController
             ['name' => 'badge', 'label' => 'Badge (ex: Agrément COBAC)', 'type' => 'text', 'required' => true],
             ['name' => 'ordre', 'label' => "Ordre d'affichage", 'type' => 'number'],
             ['name' => 'description', 'label' => 'Description', 'type' => 'textarea', 'required' => true, 'full' => true],
-            ['name' => 'icone_svg', 'label' => 'Icône (balise SVG <path>)', 'type' => 'textarea', 'required' => true, 'full' => true, 'help' => 'Exemple : <path d="M3 21h18M3 10h18"/>'],
+            ['name' => 'icone_svg', 'label' => 'Icône', 'type' => 'svg_picker', 'required' => true, 'full' => true, 'mode' => 'fragment', 'options' => config('svg_library.icons'), 'help' => 'Choisissez une icône dans la galerie ou importez un fichier SVG.'],
         ];
     }
 
@@ -47,7 +48,7 @@ class ActeurController extends CrudController
             'badge' => ['required', 'string', 'max:100'],
             'ordre' => ['nullable', 'integer'],
             'description' => ['required', 'string'],
-            'icone_svg' => ['required', 'string'],
+            'icone_svg' => ['required', 'string', new SafeSvg],
         ];
     }
 }

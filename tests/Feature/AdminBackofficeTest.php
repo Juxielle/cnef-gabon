@@ -123,7 +123,7 @@ class AdminBackofficeTest extends TestCase
         $this->assertDatabaseMissing(Acteur::class, ['id' => $acteur->id]);
     }
 
-    public function test_secteur_economique_json_fields_roundtrip(): void
+    public function test_secteur_economique_structured_fields_roundtrip(): void
     {
         $this->actingAs(User::first());
 
@@ -134,11 +134,11 @@ class AdminBackofficeTest extends TestCase
             'ordre' => 9,
             'chart_label_1' => 'Label 1',
             'chart_label_2' => 'Label 2',
-            'kpis' => json_encode([['l' => 'Indicateur', 'v' => '10%', 'd' => '+1%']]),
-            'branches' => json_encode([['n' => 'Branche A', 'pib' => 20, 'ev' => 3, 'note' => 'Bon']]),
-            'chart_categories' => json_encode(['2023', '2024']),
-            'chart_dataset_1' => json_encode([1, 2]),
-            'chart_dataset_2' => json_encode([3, 4]),
+            'kpis' => [['l' => 'Indicateur', 'v' => '10%', 'd' => '+1%']],
+            'branches' => [['n' => 'Branche A', 'pib' => 20, 'ev' => 3, 'note' => 'Bon']],
+            'chart_categories' => ['2023', '2024'],
+            'chart_dataset_1' => [1, 2],
+            'chart_dataset_2' => [3, 4],
         ];
 
         $this->post('/admin/secteurs', $payload)->assertRedirect(route('admin.secteurs.index'));
@@ -151,6 +151,48 @@ class AdminBackofficeTest extends TestCase
         $this->get(route('admin.secteurs.edit', $secteur->id))->assertStatus(200)->assertSee('Secteur de test');
 
         $this->delete(route('admin.secteurs.destroy', $secteur->id))->assertRedirect(route('admin.secteurs.index'));
+    }
+
+    public function test_structured_fields_are_shown_instead_of_json_textareas(): void
+    {
+        $this->actingAs(User::first());
+
+        $this->get('/admin/secteurs/create')
+            ->assertOk()
+            ->assertSee('Ajouter un indicateur')
+            ->assertSee('Ajouter une branche')
+            ->assertSee('Ajouter une période')
+            ->assertDontSee('Indicateurs clés (JSON)');
+
+        $this->get('/admin/veille-innovations/create')
+            ->assertOk()
+            ->assertSee('Ajouter un tag')
+            ->assertDontSee('Tags (JSON)');
+    }
+
+    public function test_svg_fields_use_a_visual_picker_and_reject_unsafe_code(): void
+    {
+        $this->actingAs(User::first());
+
+        $this->get('/admin/acteurs/create')
+            ->assertOk()
+            ->assertSee('Importer un SVG')
+            ->assertSee('Banque')
+            ->assertDontSee('balise SVG');
+
+        $this->get('/admin/liens/create')
+            ->assertOk()
+            ->assertSee('Cameroun')
+            ->assertSee('Gabon')
+            ->assertDontSee('SVG complet');
+
+        $this->post('/admin/acteurs', [
+            'nom' => 'Icône dangereuse',
+            'categorie' => 'bancaire',
+            'badge' => 'Test',
+            'description' => 'Test de validation.',
+            'icone_svg' => '<path d="M1 1" onload="alert(1)"/>',
+        ])->assertSessionHasErrors('icone_svg');
     }
 
     public function test_mediation_request_submission_management(): void

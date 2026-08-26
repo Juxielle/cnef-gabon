@@ -34,11 +34,16 @@ class SecteurEconomiqueController extends CrudController
             ['name' => 'ordre', 'label' => "Ordre d'affichage", 'type' => 'number'],
             ['name' => 'chart_label_1', 'label' => 'Libellé graphique 1', 'type' => 'text', 'required' => true],
             ['name' => 'chart_label_2', 'label' => 'Libellé graphique 2', 'type' => 'text', 'required' => true],
-            ['name' => 'kpis', 'label' => 'Indicateurs clés (JSON)', 'type' => 'json', 'required' => true, 'full' => true, 'help' => 'Tableau de {"l":"libellé","v":"valeur","d":"delta"}'],
-            ['name' => 'branches', 'label' => 'Branches / entités (JSON)', 'type' => 'json', 'required' => true, 'full' => true, 'help' => 'Tableau de {"n":"nom","pib":poids,"ev":evolution,"note":"Bon|Moy|Dif"}'],
-            ['name' => 'chart_categories', 'label' => 'Étiquettes des graphiques (JSON)', 'type' => 'json', 'required' => true, 'full' => true, 'help' => 'Ex : ["2020","2021","2022","2023","2024"]'],
-            ['name' => 'chart_dataset_1', 'label' => 'Données graphique 1 (JSON)', 'type' => 'json', 'required' => true, 'full' => true, 'help' => 'Ex : [1420,1380,1495,1620,1730]'],
-            ['name' => 'chart_dataset_2', 'label' => 'Données graphique 2 (JSON)', 'type' => 'json', 'required' => true, 'full' => true, 'help' => 'Ex : [2100,2050,2280,2520,2890]'],
+            ['name' => 'kpis', 'label' => 'Indicateurs clés', 'type' => 'repeater', 'required' => true, 'full' => true, 'add_label' => 'Ajouter un indicateur', 'columns' => [
+                ['name' => 'l', 'label' => 'Libellé'], ['name' => 'v', 'label' => 'Valeur'], ['name' => 'd', 'label' => 'Évolution / delta'],
+            ]],
+            ['name' => 'branches', 'label' => 'Branches / entités', 'type' => 'repeater', 'required' => true, 'full' => true, 'add_label' => 'Ajouter une branche', 'columns' => [
+                ['name' => 'n', 'label' => 'Nom'], ['name' => 'pib', 'label' => 'Poids', 'type' => 'number', 'step' => 'any'], ['name' => 'ev', 'label' => 'Évolution', 'type' => 'number', 'step' => 'any'],
+                ['name' => 'note', 'label' => 'État', 'type' => 'select', 'options' => ['Bon' => 'Bon', 'Moy' => 'Moyen', 'Dif' => 'Difficile']],
+            ]],
+            ['name' => 'chart_categories', 'label' => 'Étiquettes des graphiques', 'type' => 'list', 'required' => true, 'full' => true, 'add_label' => 'Ajouter une période', 'placeholder' => 'Ex. 2024'],
+            ['name' => 'chart_dataset_1', 'label' => 'Données du graphique 1', 'type' => 'list', 'input_type' => 'number', 'step' => 'any', 'required' => true, 'full' => true, 'add_label' => 'Ajouter une valeur'],
+            ['name' => 'chart_dataset_2', 'label' => 'Données du graphique 2', 'type' => 'list', 'input_type' => 'number', 'step' => 'any', 'required' => true, 'full' => true, 'add_label' => 'Ajouter une valeur'],
         ];
     }
 
@@ -51,11 +56,21 @@ class SecteurEconomiqueController extends CrudController
             'ordre' => ['nullable', 'integer'],
             'chart_label_1' => ['required', 'string', 'max:100'],
             'chart_label_2' => ['required', 'string', 'max:100'],
-            'kpis' => ['required', 'json'],
-            'branches' => ['required', 'json'],
-            'chart_categories' => ['required', 'json'],
-            'chart_dataset_1' => ['required', 'json'],
-            'chart_dataset_2' => ['required', 'json'],
+            'kpis' => ['required', 'array', 'min:1'],
+            'kpis.*.l' => ['required', 'string', 'max:150'],
+            'kpis.*.v' => ['required', 'string', 'max:100'],
+            'kpis.*.d' => ['nullable', 'string', 'max:100'],
+            'branches' => ['required', 'array', 'min:1'],
+            'branches.*.n' => ['required', 'string', 'max:150'],
+            'branches.*.pib' => ['required', 'numeric'],
+            'branches.*.ev' => ['required', 'numeric'],
+            'branches.*.note' => ['required', 'in:Bon,Moy,Dif'],
+            'chart_categories' => ['required', 'array', 'min:1'],
+            'chart_categories.*' => ['required', 'string', 'max:50'],
+            'chart_dataset_1' => ['required', 'array', 'min:1'],
+            'chart_dataset_1.*' => ['required', 'numeric'],
+            'chart_dataset_2' => ['required', 'array', 'min:1'],
+            'chart_dataset_2.*' => ['required', 'numeric'],
         ];
     }
 }

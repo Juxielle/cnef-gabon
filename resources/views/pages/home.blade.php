@@ -158,7 +158,7 @@
   </div>
 </section>
 
-<section style="background:#fff;padding:72px 5vw">
+<section id="contact" style="background:#fff;padding:72px 5vw">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1100px" class="contact-grid">
 
     <div>

@@ -1,10 +1,10 @@
 @php
-    $isRegulation = request()->routeIs('acteurs.*', 'agrements.*', 'veille.*');
+    $isRegulation = request()->routeIs('acteurs.*', 'agrements.*', 'agrement-dossiers.*', 'veille.*');
     $isRessources = request()->routeIs('education.*', 'actualites.*', 'liens.*');
 @endphp
 <nav class="site-nav">
   <a href="{{ route('home') }}" class="nav-logo" style="display:flex;align-items:center;gap:12px;flex-shrink:0;text-decoration:none">
-    <img class="nav-emb" src="{{ asset('assets/images/logo-cnef.jpeg') }}" alt="Logo CNEF">
+    <img class="nav-emb" src="{{ asset('assets/images/logo-semi-trans.png') }}" alt="Logo CNEF">
     <div class="nav-txt">
       <span>CNEF Gabon</span>
       <span>Comité National Économique et Financier</span>
@@ -23,6 +23,7 @@
         <a class="nav-dd-item {{ request()->routeIs('acteurs.*') ? 'active' : '' }}" href="{{ route('acteurs.index') }}">Acteurs</a>
         <a class="nav-dd-item {{ request()->routeIs('agrements.*') ? 'active' : '' }}" href="{{ route('agrements.index') }}">Agréments</a>
         <a class="nav-dd-item {{ request()->routeIs('veille.*') ? 'active' : '' }}" href="{{ route('veille.index') }}">Veille réglementaire</a>
+        <a class="nav-dd-item {{ request()->routeIs('agrement-dossiers.*') ? 'active' : '' }}" href="{{ route('agrement-dossiers.index') }}">Suivi dossier d'Agrément</a>
       </div>
     </div>
     <span class="nav-sep"></span>

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\ContactMessage;
+use App\Models\AgrementDossier;
 use App\Models\MediationRequest;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,6 +26,7 @@ class PagesSmokeTest extends TestCase
             '/acteurs',
             '/acteurs?categorie=bancaire',
             '/agrements',
+            '/suivi-agrement',
             '/veille-reglementaire',
             '/veille-reglementaire?categorie=cobac',
             '/barometre-economique',
@@ -59,6 +61,31 @@ class PagesSmokeTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHas('success');
         $this->assertDatabaseHas(ContactMessage::class, ['email' => 'jean@test.ga']);
+    }
+
+    public function test_agrement_dossier_can_be_tracked_without_exposing_contact_data(): void
+    {
+        AgrementDossier::create([
+            'reference' => 'AGR-20260822-ABC123', 'raison_sociale' => 'Acteur Test',
+            'type_agrement' => 'Établissement de crédit', 'nom_contact' => 'Jean Test',
+            'email' => 'secret@test.ga', 'telephone' => '+24100000000', 'statut' => 'instruction',
+        ]);
+
+        $this->post('/suivi-agrement/recherche', ['reference' => 'agr-20260822-abc123'])
+            ->assertOk()->assertSee('En cours d’instruction')->assertDontSee('secret@test.ga');
+    }
+
+    public function test_chatbot_returns_contextual_guidance(): void
+    {
+        $this->postJson('/assistant/message', ['message' => 'Comment déposer une réclamation ?'])
+            ->assertOk()
+            ->assertJsonPath('action.label', 'Déposer une saisine')
+            ->assertJsonStructure(['answer', 'action' => ['label', 'url']]);
+    }
+
+    public function test_chatbot_validates_empty_messages(): void
+    {
+        $this->postJson('/assistant/message', ['message' => ''])->assertUnprocessable();
     }
 
     public function test_contact_form_validation_fails_on_missing_fields(): void

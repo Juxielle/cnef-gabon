@@ -2,7 +2,7 @@
   <div class="ft-top">
     <div class="ft-brand">
       <div class="ft-logo">
-        <img class="ft-emb" src="{{ asset('assets/images/logo-cnef.jpeg') }}" alt="Logo CNEF">
+        <img class="ft-emb" src="{{ asset('assets/images/logo-semi-trans.png') }}" alt="Logo CNEF">
         <div class="ft-nt"><span>CNEF Gabon</span><span>Comité National Économique et Financier</span></div>
       </div>
       <p class="ft-desc">Organe de régulation financière de la République Gabonaise, le CNEF supervise l'ensemble des acteurs du secteur financier, conseille le gouvernement et promeut le développement économique national.</p>

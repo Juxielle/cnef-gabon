@@ -30,7 +30,10 @@ class EtudeController extends CrudController
             ['name' => 'ordre', 'label' => "Ordre d'affichage", 'type' => 'number'],
             ['name' => 'titre', 'label' => 'Titre', 'type' => 'text', 'required' => true, 'full' => true],
             ['name' => 'description', 'label' => 'Description', 'type' => 'textarea', 'required' => true, 'full' => true],
-            ['name' => 'kpis', 'label' => 'Indicateurs clés (JSON)', 'type' => 'json', 'required' => true, 'full' => true, 'help' => 'Tableau de {"v": "valeur", "l": "libellé"}. Ex : [{"v":"8,4%","l":"Croissance actifs"}]'],
+            ['name' => 'kpis', 'label' => 'Indicateurs clés', 'type' => 'repeater', 'required' => true, 'full' => true, 'add_label' => 'Ajouter un indicateur', 'columns' => [
+                ['name' => 'v', 'label' => 'Valeur', 'placeholder' => 'Ex. 8,4 %'],
+                ['name' => 'l', 'label' => 'Libellé', 'placeholder' => 'Ex. Croissance des actifs'],
+            ]],
         ];
     }
 
@@ -44,7 +47,9 @@ class EtudeController extends CrudController
             'ordre' => ['nullable', 'integer'],
             'titre' => ['required', 'string'],
             'description' => ['required', 'string'],
-            'kpis' => ['required', 'json'],
+            'kpis' => ['required', 'array', 'min:1'],
+            'kpis.*.v' => ['required', 'string', 'max:100'],
+            'kpis.*.l' => ['required', 'string', 'max:150'],
         ];
     }
 }

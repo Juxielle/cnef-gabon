@@ -93,12 +93,22 @@ abstract class CrudController extends Controller
         return redirect()->route($this->routeBase.'.index')->with('success', $this->title.' supprimé(e).');
     }
 
-    /**
-     * Valide la requête et décode les champs JSON (saisis en texte brut
-     * dans le formulaire) vers un tableau PHP avant enregistrement.
-     */
+    /** Valide et normalise les valeurs structurées avant enregistrement. */
     protected function validated(Request $request, array $rules): array
     {
+        // The UI posts native arrays. Keep accepting the former JSON payloads
+        // so existing integrations remain compatible.
+        foreach ($this->fields() as $field) {
+            if (! in_array($field['type'] ?? null, ['list', 'repeater'], true)) {
+                continue;
+            }
+
+            $value = $request->input($field['name']);
+            if (is_string($value) && is_array($decoded = json_decode($value, true))) {
+                $request->merge([$field['name'] => $decoded]);
+            }
+        }
+
         $data = $request->validate($rules);
 
         foreach ($this->fields() as $field) {
@@ -107,6 +117,17 @@ abstract class CrudController extends Controller
             }
             if (($field['type'] ?? null) === 'checkbox') {
                 $data[$field['name']] = $request->boolean($field['name']);
+            }
+            if (($field['type'] ?? null) === 'list' && isset($data[$field['name']])) {
+                $data[$field['name']] = array_values(array_filter(
+                    $data[$field['name']], fn ($value) => $value !== null && $value !== ''
+                ));
+            }
+            if (($field['type'] ?? null) === 'repeater' && isset($data[$field['name']])) {
+                $data[$field['name']] = array_values(array_filter(
+                    $data[$field['name']],
+                    fn ($row) => is_array($row) && count(array_filter($row, fn ($value) => $value !== null && $value !== '')) > 0
+                ));
             }
         }
 

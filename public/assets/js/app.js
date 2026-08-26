@@ -110,3 +110,31 @@ function renderFileList(inputId, listId) {
       <span style="font-size:11px;color:rgba(255,255,255,.3)">${(f.size / 1024).toFixed(0)} Ko</span>
     </div>`).join('');
 }
+
+/* ==== ASSISTANT CNEF ==== */
+document.addEventListener('DOMContentLoaded', () => {
+  const root = document.getElementById('cnef-chat');
+  if (!root) return;
+  const panel = document.getElementById('chat-panel'), launcher = document.getElementById('chat-launcher');
+  const form = document.getElementById('chat-form'), input = document.getElementById('chat-input');
+  const messages = document.getElementById('chat-messages'), submit = form.querySelector('button[type="submit"]');
+  const setOpen = open => { root.classList.toggle('open', open); launcher.setAttribute('aria-expanded', String(open)); panel.setAttribute('aria-hidden', String(!open)); if (open) setTimeout(() => input.focus(), 220); };
+  launcher.addEventListener('click', () => setOpen(!root.classList.contains('open')));
+  root.querySelector('.chat-close').addEventListener('click', () => setOpen(false));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  const bubble = (text, type) => { const el = document.createElement('div'); el.className = `chat-bubble ${type}`; el.textContent = text; messages.appendChild(el); messages.scrollTop = messages.scrollHeight; return el; };
+  const ask = async question => {
+    const value = question.trim(); if (!value || submit.disabled) return;
+    root.querySelector('.chat-suggestions')?.remove(); bubble(value, 'user'); input.value = ''; submit.disabled = true;
+    const waiting = bubble('Je recherche l’information…', 'bot loading');
+    try {
+      const response = await fetch(root.dataset.endpoint, {method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},body:JSON.stringify({message:value})});
+      if (!response.ok) throw new Error('Request failed');
+      const data = await response.json(); waiting.remove(); bubble(data.answer, 'bot');
+      if (data.action?.url) { const link = document.createElement('a'); link.className = 'chat-action'; link.href = data.action.url; link.textContent = `${data.action.label} →`; messages.appendChild(link); }
+    } catch (_) { waiting.textContent = 'Le service est momentanément indisponible. Contactez le CNEF au +241 11 72 20 00 ou à contact@cnef.ga.'; waiting.classList.remove('loading'); }
+    finally { submit.disabled = false; input.focus(); messages.scrollTop = messages.scrollHeight; }
+  };
+  form.addEventListener('submit', e => { e.preventDefault(); ask(input.value); });
+  root.querySelectorAll('.chat-suggestions button').forEach(button => button.addEventListener('click', () => ask(button.textContent)));
+});

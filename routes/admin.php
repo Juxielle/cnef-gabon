@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ActeurController;
+use App\Http\Controllers\Admin\AgrementDossierController;
 use App\Http\Controllers\Admin\ActualiteController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\BaroKpiController;
@@ -45,6 +46,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             'mediation-requests' => MediationRequestController::class,
             'messages' => ContactMessageController::class,
             'candidatures' => MediateurCandidatureController::class,
+            'agrement-dossiers' => AgrementDossierController::class,
         ] as $prefix => $controller) {
             Route::get($prefix, [$controller, 'index'])->name($prefix.'.index');
             Route::get($prefix.'/{id}', [$controller, 'show'])->name($prefix.'.show');

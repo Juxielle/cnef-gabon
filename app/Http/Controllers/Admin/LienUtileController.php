@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\LienUtile;
+use App\Rules\SafeSvg;
 use Illuminate\Database\Eloquent\Model;
 
 class LienUtileController extends CrudController
@@ -40,7 +41,7 @@ class LienUtileController extends CrudController
             ]],
             ['name' => 'ordre', 'label' => "Ordre d'affichage", 'type' => 'number'],
             ['name' => 'description', 'label' => 'Description', 'type' => 'textarea', 'required' => true, 'full' => true],
-            ['name' => 'drapeau_svg', 'label' => 'Drapeau (SVG complet, optionnel)', 'type' => 'textarea', 'full' => true],
+            ['name' => 'drapeau_svg', 'label' => 'Drapeau', 'type' => 'svg_picker', 'full' => true, 'mode' => 'svg', 'options' => config('svg_library.flags'), 'help' => 'Choisissez un drapeau ou importez un fichier SVG.'],
         ];
     }
 
@@ -55,7 +56,7 @@ class LienUtileController extends CrudController
             'statut' => ['required', 'string', 'max:50'],
             'ordre' => ['nullable', 'integer'],
             'description' => ['required', 'string'],
-            'drapeau_svg' => ['nullable', 'string'],
+            'drapeau_svg' => ['nullable', 'string', new SafeSvg],
         ];
     }
 }

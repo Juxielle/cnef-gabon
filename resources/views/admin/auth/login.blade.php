@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/jpeg" href="{{ asset('assets/images/logo-cnef.jpeg') }}">
+<link rel="icon" type="image/png" href="{{ asset('assets/images/logo-semi-trans.png') }}">
 <title>Connexion — Back-office CNEF</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}?v={{ filemtime(public_path('assets/css/app.css')) }}">
@@ -20,7 +20,7 @@
 
   <div class="admin-login-card">
     <div class="admin-login-logo">
-      <img src="{{ asset('assets/images/logo-cnef.jpeg') }}" alt="Logo CNEF">
+      <img src="{{ asset('assets/images/logo-semi-trans.png') }}" alt="Logo CNEF">
       <span><span>CNEF Gabon</span><span>Back-office</span></span>
     </div>
     <div class="admin-login-title">Connexion</div>

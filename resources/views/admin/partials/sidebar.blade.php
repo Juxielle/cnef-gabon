@@ -1,6 +1,6 @@
 <aside class="admin-sidebar" id="admin-sidebar">
   <a href="{{ route('admin.dashboard') }}" class="admin-sidebar-brand" style="text-decoration:none">
-    <img class="admin-sidebar-emb" src="{{ asset('assets/images/logo-cnef.jpeg') }}" alt="Logo CNEF">
+    <img class="admin-sidebar-emb" src="{{ asset('assets/images/logo-semi-trans.png') }}" alt="Logo CNEF">
     <span><span>CNEF Gabon</span><span>Back-office</span></span>
   </a>
 
@@ -8,6 +8,11 @@
     <a class="admin-nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}">
       <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3m10-11v10a1 1 0 01-1 1h-3m-6 0h6m-6 0V15h6v6"/></svg>
       Tableau de bord
+    </a>
+
+    <a class="admin-nav-link {{ request()->routeIs('admin.agrement-dossiers.*') ? 'active' : '' }}" href="{{ route('admin.agrement-dossiers.index') }}">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15l2 2 4-4"/></svg>
+      Dossiers d’agrément <span class="admin-nav-count">{{ \App\Models\AgrementDossier::count() }}</span>
     </a>
 
     <div class="admin-nav-group">Contenu du site</div>
