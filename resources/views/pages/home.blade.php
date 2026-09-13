@@ -17,6 +17,30 @@
   <div style="height:12px;background:#003189"></div>
 </div>
 
+@if ($annonces->isNotEmpty())
+<aside class="announcement-bar" id="announcement-bar" aria-label="Annonces importantes" data-count="{{ $annonces->count() }}">
+  <div class="announcement-icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 001 1h2l3 5h3l-2-5 8-3V5L6 9H4a1 1 0 00-1 1v1zM18 8h3M18 4l2-2M18 12l2 2"/></svg>
+  </div>
+  <div class="announcement-items" aria-live="polite">
+    @foreach ($annonces as $i => $annonce)
+      <article class="announcement-item announcement-{{ $annonce->niveau }} {{ $i === 0 ? 'active' : '' }}">
+        <span class="announcement-kicker">Annonce CNEF</span>
+        <strong>{{ $annonce->titre }}</strong>
+        <span class="announcement-message">{{ $annonce->message }}</span>
+        @if ($annonce->url)
+          <a href="{{ $annonce->url }}">{{ $annonce->label_lien }} <span aria-hidden="true">→</span></a>
+        @endif
+      </article>
+    @endforeach
+  </div>
+  @if ($annonces->count() > 1)
+    <div class="announcement-progress" aria-hidden="true"><span></span></div>
+    <span class="announcement-position"><b>1</b>/{{ $annonces->count() }}</span>
+  @endif
+</aside>
+@endif
+
 <div style="background:var(--vert-f);position:relative;overflow:hidden;min-height:calc(100vh - var(--nav));display:flex;flex-direction:column">
   <div class="hcar" id="hero-carousel">
     @foreach ($slides as $i => $slide)
@@ -34,6 +58,18 @@
       </div>
       <button class="hcar-arrow" onclick="hcarNext()" aria-label="Suivant"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
     </div>
+  </div>
+
+  <div class="members-album" id="members-album" aria-label="Membres du CNEF">
+    <div class="members-album-stack">
+      @foreach ($members as $i => $member)
+        <img class="members-album-photo {{ $i === $members->count() - 1 ? 'previous' : ($i === 0 ? 'current' : ($i === 1 ? 'next' : '')) }}"
+          src="{{ asset('assets/images/' . $member['image']) }}" alt="{{ $member['alt'] }}"
+          data-member-name="{{ $member['name'] }}"
+          width="150" height="150" loading="{{ $i === 0 ? 'eager' : 'lazy' }}">
+      @endforeach
+    </div>
+    <span class="members-album-count" aria-live="polite">{{ $members->first()['name'] }}</span>
   </div>
 
   <div style="flex:1;display:flex;align-items:center;padding:60px 5vw 180px;position:relative;z-index:2">

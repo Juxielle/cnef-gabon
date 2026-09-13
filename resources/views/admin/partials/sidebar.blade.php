@@ -16,6 +16,10 @@
     </a>
 
     <div class="admin-nav-group">Contenu du site</div>
+    <a class="admin-nav-link {{ request()->routeIs('admin.annonces.*') ? 'active' : '' }}" href="{{ route('admin.annonces.index') }}">
+      <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 00-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+      Annonces <span class="admin-nav-count">{{ \App\Models\Annonce::count() }}</span>
+    </a>
     <a class="admin-nav-link {{ request()->routeIs('admin.acteurs.*') ? 'active' : '' }}" href="{{ route('admin.acteurs.index') }}">
       <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11"/></svg>
       Acteurs <span class="admin-nav-count">{{ \App\Models\Acteur::count() }}</span>

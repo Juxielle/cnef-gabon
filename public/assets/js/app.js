@@ -88,6 +88,72 @@ function initHeroCarousel() {
 }
 document.addEventListener('DOMContentLoaded', initHeroCarousel);
 
+/* ==== BANDEAU D'ANNONCES ==== */
+document.addEventListener('DOMContentLoaded', () => {
+  const bar = document.getElementById('announcement-bar');
+  if (!bar) return;
+  const items = Array.from(bar.querySelectorAll('.announcement-item'));
+  const position = bar.querySelector('.announcement-position b');
+  const progress = bar.querySelector('.announcement-progress');
+  if (items.length < 2) return;
+
+  let index = 0;
+  const restartProgress = () => {
+    if (!progress) return;
+    progress.classList.remove('running');
+    void progress.offsetWidth;
+    progress.classList.add('running');
+  };
+  const showNext = () => {
+    items[index].classList.remove('active');
+    index = (index + 1) % items.length;
+    items[index].classList.add('active');
+    if (position) position.textContent = String(index + 1);
+    restartProgress();
+  };
+  restartProgress();
+  let timer = window.setInterval(showNext, 7000);
+  bar.addEventListener('mouseenter', () => {
+    window.clearInterval(timer);
+    progress?.classList.remove('running');
+  });
+  bar.addEventListener('mouseleave', () => {
+    restartProgress();
+    timer = window.setInterval(showNext, 7000);
+  });
+});
+
+/* ==== ALBUM DES MEMBRES (page d'accueil) ==== */
+function initMembersAlbum() {
+  const album = document.getElementById('members-album');
+  if (!album) return;
+  const photos = Array.from(album.querySelectorAll('.members-album-photo'));
+  const memberName = album.querySelector('.members-album-count');
+  if (photos.length < 2) return;
+
+  let index = 0;
+  const render = () => {
+    const previous = (index - 1 + photos.length) % photos.length;
+    const next = (index + 1) % photos.length;
+    photos.forEach((photo, photoIndex) => {
+      photo.classList.toggle('previous', photoIndex === previous);
+      photo.classList.toggle('current', photoIndex === index);
+      photo.classList.toggle('next', photoIndex === next);
+    });
+    if (memberName) memberName.textContent = photos[index].dataset.memberName || photos[index].alt;
+  };
+  const turnPage = () => {
+    index = (index + 1) % photos.length;
+    render();
+  };
+
+  render();
+  let timer = window.setInterval(turnPage, 3200);
+  album.addEventListener('mouseenter', () => window.clearInterval(timer));
+  album.addEventListener('mouseleave', () => { timer = window.setInterval(turnPage, 3200); });
+}
+document.addEventListener('DOMContentLoaded', initMembersAlbum);
+
 /* ==== UPLOAD ZONE (formulaires de saisine / candidature) ==== */
 function dragOver(e, zoneId) { e.preventDefault(); document.getElementById(zoneId).classList.add('drag'); }
 function dragLeave(e, zoneId) { document.getElementById(zoneId).classList.remove('drag'); }

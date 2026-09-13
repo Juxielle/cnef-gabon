@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Acteur;
+use App\Models\Annonce;
 use App\Models\ContactMessage;
 use App\Models\MediateurCandidature;
 use App\Models\MediationRequest;
@@ -69,6 +70,7 @@ class AdminBackofficeTest extends TestCase
     {
         return [
             'acteurs' => ['acteurs'],
+            'annonces' => ['annonces'],
             'textes' => ['textes'],
             'etudes' => ['etudes'],
             'actualites' => ['actualites'],
@@ -121,6 +123,44 @@ class AdminBackofficeTest extends TestCase
 
         $this->delete(route('admin.acteurs.destroy', $acteur->id))->assertRedirect(route('admin.acteurs.index'));
         $this->assertDatabaseMissing(Acteur::class, ['id' => $acteur->id]);
+    }
+
+    public function test_announcement_full_crud_lifecycle(): void
+    {
+        $this->actingAs(User::first());
+
+        $this->post('/admin/annonces', [
+            'titre' => 'Fermeture exceptionnelle',
+            'message' => 'Les bureaux seront fermés au public.',
+            'niveau' => 'important',
+            'starts_at' => now()->subHour()->format('Y-m-d H:i:s'),
+            'ends_at' => now()->addDay()->format('Y-m-d H:i:s'),
+            'published' => '1',
+            'ordre' => 1,
+        ])->assertRedirect(route('admin.annonces.index'));
+
+        $annonce = Annonce::where('titre', 'Fermeture exceptionnelle')->firstOrFail();
+        $this->get('/')->assertOk()->assertSee('Fermeture exceptionnelle');
+
+        $this->put(route('admin.annonces.update', $annonce), [
+            'titre' => 'Réouverture exceptionnelle',
+            'message' => 'Les bureaux sont de nouveau ouverts.',
+            'niveau' => 'information',
+            'starts_at' => now()->subHour()->format('Y-m-d H:i:s'),
+            'ends_at' => now()->addDays(2)->format('Y-m-d H:i:s'),
+            'published' => '1',
+            'ordre' => 2,
+        ])->assertRedirect(route('admin.annonces.index'));
+
+        $this->assertDatabaseHas(Annonce::class, [
+            'id' => $annonce->id,
+            'titre' => 'Réouverture exceptionnelle',
+            'published' => true,
+        ]);
+
+        $this->delete(route('admin.annonces.destroy', $annonce))
+            ->assertRedirect(route('admin.annonces.index'));
+        $this->assertDatabaseMissing(Annonce::class, ['id' => $annonce->id]);
     }
 
     public function test_secteur_economique_structured_fields_roundtrip(): void

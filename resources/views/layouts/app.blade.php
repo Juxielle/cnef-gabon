@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="{{ app()->getLocale() }}">
 <head>
+@include('partials.analytics')
 @include('partials.styles')
 </head>
 <body>

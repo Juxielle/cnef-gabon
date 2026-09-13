@@ -24,6 +24,9 @@
           if (($field['type'] ?? 'text') === 'json') {
               $raw = old($name, $raw ? json_encode($raw, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '[]');
           }
+          if (($field['type'] ?? 'text') === 'datetime-local' && $raw instanceof \DateTimeInterface) {
+              $raw = $raw->format('Y-m-d\TH:i');
+          }
         @endphp
         <div class="afg {{ ($field['full'] ?? false) ? 'afg-full' : '' }}">
           @if (($field['type'] ?? 'text') === 'checkbox')
@@ -132,6 +135,10 @@
               </select>
             @elseif ($field['type'] === 'number')
               <input type="number" step="{{ $field['step'] ?? '1' }}" name="{{ $name }}" class="afi" value="{{ $raw }}">
+            @elseif ($field['type'] === 'datetime-local')
+              <input type="datetime-local" name="{{ $name }}" class="afi" value="{{ $raw instanceof \DateTimeInterface ? $raw->format('Y-m-d\TH:i') : $raw }}">
+            @elseif ($field['type'] === 'url')
+              <input type="url" name="{{ $name }}" class="afi" value="{{ $raw }}">
             @else
               <input type="text" name="{{ $name }}" class="afi" value="{{ $raw }}">
             @endif

@@ -25,7 +25,7 @@ class LienUtileController extends CrudController
     {
         return [
             ['name' => 'groupe', 'label' => 'Groupe', 'type' => 'select', 'required' => true, 'options' => [
-                'CNEF des pays CEMAC' => 'CNEF des pays CEMAC',
+                'CNEF des autres pays de la CEMAC' => 'CNEF des autres pays de la CEMAC',
                 'Régulateurs régionaux CEMAC' => 'Régulateurs régionaux CEMAC',
                 'Institutions financières internationales' => 'Institutions financières internationales',
                 'Banques centrales africaines et mondiales' => 'Banques centrales africaines et mondiales',

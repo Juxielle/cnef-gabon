@@ -47,5 +47,16 @@
       </div>
     </div>
     <a class="nav-btn nav-cta {{ request()->routeIs('mediation.*') ? 'active' : '' }}" href="{{ route('mediation.index') }}">Médiation</a>
+    <form class="language-switcher" aria-label="Choisir la langue">
+      <label for="site-language" class="sr-only">Choisir la langue</label>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18M12 3a15 15 0 000 18"/></svg>
+      <select id="site-language" aria-label="Choisir la langue" onchange="if(this.value) window.location.href=this.value">
+        @foreach (config('locales.supported', []) as $code => $language)
+          <option value="{{ route('locale.switch', $code) }}" lang="{{ $code }}" @selected(app()->getLocale() === $code)>
+            {{ $language['label'] }}
+          </option>
+        @endforeach
+      </select>
+    </form>
   </div>
 </nav>

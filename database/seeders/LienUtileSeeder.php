@@ -10,7 +10,7 @@ class LienUtileSeeder extends Seeder
     public function run(): void
     {
         $groupes = [
-            'CNEF des pays CEMAC' => [
+            'CNEF des autres pays de la CEMAC' => [
                 ['nom' => 'CNEF Cameroun', 'pays' => 'Cameroun', 'capitale' => 'Yaoundé', 'description' => 'Site officiel — bulletins économiques, statistiques, éducation financière, comparateur bancaire', 'url' => 'https://cnefcameroun.cm', 'statut' => 'Actif', 'drapeau_svg' => '<svg width="52" height="32" viewBox="0 0 3 2" style="border-radius:4px;display:block;margin-bottom:10px"><rect width="1" height="2" fill="#007A5E"/><rect x="1" width="1" height="2" fill="#CE1126"/><rect x="2" width="1" height="2" fill="#FCD116"/><polygon points="1.5,0.45 1.62,0.82 1.14,0.57 1.86,0.57 1.38,0.82" fill="#FCD116"/></svg>'],
                 ['nom' => 'CNEF Congo', 'pays' => 'Congo-Brazzaville', 'capitale' => 'Brazzaville', 'description' => 'Publications du CNEF via le Ministère des Finances — comptes rendus de sessions, notes conjoncturelles', 'url' => 'https://www.finances.gouv.cg', 'statut' => 'Actif', 'drapeau_svg' => '<svg width="52" height="32" viewBox="0 0 3 2" style="border-radius:4px;display:block;margin-bottom:10px"><rect width="3" height="2" fill="#FBDE4A"/><polygon points="0,0 1.8,0 0,2" fill="#009A44"/><polygon points="3,0 3,2 1.2,2" fill="#DC241F"/></svg>'],
                 ['nom' => 'CNEF Tchad', 'pays' => 'Tchad', 'capitale' => "N'Djamena", 'description' => 'Comité National Économique et Financier du Tchad — site institutionnel en cours de déploiement', 'url' => 'https://www.beac.int', 'statut' => 'En déploiement', 'drapeau_svg' => '<svg width="52" height="32" viewBox="0 0 3 2" style="border-radius:4px;display:block;margin-bottom:10px"><rect width="1" height="2" fill="#002664"/><rect x="1" width="1" height="2" fill="#FECB00"/><rect x="2" width="1" height="2" fill="#DC143C"/></svg>'],
@@ -26,6 +26,7 @@ class LienUtileSeeder extends Seeder
                 ['nom' => 'BVMAC', 'description' => "Bourse des Valeurs Mobilières de l'Afrique Centrale — marché financier régional", 'url' => 'https://www.bvm-ac.org', 'statut' => 'Actif'],
             ],
             'Institutions financières internationales' => [
+                ['nom' => 'GIMAC', 'description' => "Groupement Interbancaire Monétique de l'Afrique Centrale — interopérabilité des paiements dans la CEMAC", 'url' => 'https://gimac-afr.com', 'statut' => 'Actif'],
                 ['nom' => 'Banque Mondiale', 'description' => 'Groupe Banque Mondiale — financement du développement et réduction de la pauvreté', 'url' => 'https://www.worldbank.org', 'statut' => 'Actif'],
                 ['nom' => 'FMI', 'description' => 'Fonds Monétaire International — stabilité monétaire et financière mondiale', 'url' => 'https://www.imf.org', 'statut' => 'Actif'],
                 ['nom' => 'Banque Africaine de Développement', 'description' => 'BAD — principale institution de financement du développement en Afrique', 'url' => 'https://www.afdb.org', 'statut' => 'Actif'],

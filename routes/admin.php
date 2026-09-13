@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ActeurController;
+use App\Http\Controllers\Admin\AnnonceController;
 use App\Http\Controllers\Admin\AgrementDossierController;
 use App\Http\Controllers\Admin\ActualiteController;
 use App\Http\Controllers\Admin\AuthController;
@@ -31,6 +32,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::resource('acteurs', ActeurController::class)->except(['show']);
+        Route::resource('annonces', AnnonceController::class)->except(['show']);
         Route::resource('textes', TexteReglementaireController::class)->except(['show']);
         Route::resource('etudes', EtudeController::class)->except(['show']);
         Route::resource('actualites', ActualiteController::class)->except(['show']);

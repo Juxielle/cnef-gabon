@@ -15,6 +15,13 @@ use App\Http\Controllers\MediationController;
 use App\Http\Controllers\VeilleController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/langue/{locale}', function (string $locale) {
+    abort_unless(array_key_exists($locale, config('locales.supported', [])), 404);
+    session(['locale' => $locale]);
+
+    return redirect()->to(url()->previous());
+})->where('locale', '[a-z]{2,5}(?:-[A-Z]{2})?')->name('locale.switch');
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
