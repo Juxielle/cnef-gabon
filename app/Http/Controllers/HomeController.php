@@ -29,7 +29,7 @@ class HomeController extends Controller
             'Mme MVONO Pierrette',
             'M. NGUEMA NGUEMA Sosthène',
             'M. SANA BANGUI Yvon',
-            'M. ONDEL Marcel',
+            'M. ONDELE Marcel',
             'M. MAPANGOU Guy Bertrand',
             'M. MANGUE AYINGONO Salvatore',
             'M. BANGA NTOLO Louis',
