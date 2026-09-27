@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class GoogleAnalyticsTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_google_tag_is_not_loaded_without_a_measurement_id(): void
     {
         config(['services.google_analytics.measurement_id' => null]);

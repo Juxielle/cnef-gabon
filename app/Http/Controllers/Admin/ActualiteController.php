@@ -28,6 +28,7 @@ class ActualiteController extends CrudController
                 'communique' => 'Communiqué',
                 'etude' => 'Étude & Rapport',
                 'evenement' => 'Événement',
+                'mediation' => 'Médiation financière',
             ]],
             ['name' => 'badge_label', 'label' => 'Libellé du badge', 'type' => 'text', 'required' => true],
             ['name' => 'badge_couleur', 'label' => 'Couleur du badge (hex)', 'type' => 'text', 'required' => true, 'help' => 'Ex : #E8A317'],

@@ -85,6 +85,11 @@ nav.site-nav{
 .nav-dd-item:hover{background:rgba(255,255,255,.08);color:#fff}
 .nav-dd-item.active{color:var(--or);background:rgba(232,163,23,.1)}
 
+/* ── NAVBAR MÉDIATION ── */
+.nav-med-badge{font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:4px;background:var(--or);color:var(--vert-f);letter-spacing:.05em;text-transform:uppercase}
+.nav-back-cnef{color:#fff!important;background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.16)!important;font-weight:500!important}
+.nav-back-cnef:hover{background:rgba(255,255,255,.16)!important;color:var(--or)!important;border-color:rgba(232,163,23,.4)!important}
+
 /* ── PAGE WRAPPER (rendu serveur : plus de SPA JS, une page = une vue) ── */
 .page{background:var(--blanc)}
 main{padding-top:var(--nav)}
@@ -337,7 +342,8 @@ p.si.light{color:rgba(255,255,255,.58)}
 }
 .fi::placeholder,.fta::placeholder{color:rgba(255,255,255,.28)}
 .fi:focus,.fsel:focus,.fta:focus{border-color:var(--or)}
-.fsel option{background:#0D1117;color:#fff}
+.fsel optgroup{background:#142e22;color:#E8A317;font-weight:700;font-size:12.5px;font-style:normal;padding:8px 8px 4px;letter-spacing:.03em}
+.fsel option{background:#0D1117;color:#fff;padding:6px 12px;font-weight:400}
 .fta{resize:vertical;min-height:100px}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .upload-zone{
@@ -508,7 +514,7 @@ footer{background:var(--vert-f);padding:64px 5vw 28px}
 .rv{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
 .rv.vis{opacity:1;transform:none}
 
-/* ── RESPONSIVE ── */
+/* ── RESPONSIVE GLOBAL ── */
 @media(max-width:1024px){
   .charts-grid{grid-template-columns:1fr}
   .chart-box.full{grid-column:1}
@@ -517,21 +523,68 @@ footer{background:var(--vert-f);padding:64px 5vw 28px}
   .med-layout{grid-template-columns:1fr}
   .stats-charts{grid-template-columns:1fr}
   .ft-top{grid-template-columns:1fr 1fr;gap:32px}
+  nav.site-nav{padding:0 2vw;gap:12px}
 }
+
+@media(max-width:860px){
+  .contact-grid{grid-template-columns:1fr!important;gap:24px!important}
+  .track-layout{grid-template-columns:1fr}
+}
+
 @media(max-width:768px){
   .actu-grid{grid-template-columns:1fr}
   .stats-med-grid{grid-template-columns:1fr 1fr}
   .bt-grid-5{grid-template-columns:2fr 1fr 1fr}
   .bt-grid-5 .bt-hide{display:none}
+
+  /* Navigation mobile & tablette */
+  nav.site-nav{padding:0 12px;gap:8px}
+  .nav-emb{width:38px;height:38px;border-radius:8px}
+  .nav-txt span:last-child{display:none}
+  .nav-txt span:first-child{font-size:14px}
+  .nav-menu{gap:2px;-webkit-overflow-scrolling:touch}
+  .nav-btn{padding:6px 8px;font-size:11.5px}
+  .nav-cta{padding:6px 10px;font-size:11.5px;margin-left:2px}
+  .nav-sep{margin:0 3px;height:16px}
+  .language-switcher{padding:3px 6px;margin-left:4px}
+  .language-switcher select{max-width:55px;font-size:10px}
+  .nav-dd-menu{max-width:calc(100vw - 20px);left:10px!important}
+
+  /* Typographie & Hero */
+  .hero-h1{font-size:clamp(28px,7vw,42px)!important}
+  h2.sh{font-size:clamp(22px,5.5vw,34px)!important}
+  p.si{margin-bottom:28px}
 }
+
+@media(max-width:640px){
+  #floating-flag{display:none!important}
+  .branches-table,.litiges-table{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .branches-table .bt-head,.branches-table .bt-row,
+  .litiges-table .bt-head,.litiges-table .bt-row{min-width:520px}
+  .baro-kpis{grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr))}
+  .hstat{flex:1 1 45%!important}
+}
+
 @media(max-width:600px){
-  section.sec{padding:50px 5vw}
+  section.sec{padding:40px 5vw}
   .stats-med-grid{grid-template-columns:1fr}
   .frow{grid-template-columns:1fr}
-  .ft-top{grid-template-columns:1fr}
+  .ft-top{grid-template-columns:1fr;gap:24px}
+  .med-form-wrap,.deposit-card,.track-card,.track-help{padding:20px 16px!important}
+  .hero-btns{flex-direction:column;gap:10px;width:100%}
+  .hero-btns a{width:100%;text-align:center;justify-content:center}
+  .quick-card{padding:20px 18px}
+  .miss-card{padding:20px 18px}
 }
-@media(max-width:860px){
-  #page-accueil .contact-grid{grid-template-columns:1fr!important}
+
+@media(max-width:420px){
+  nav.site-nav{padding:0 8px;gap:6px}
+  .nav-emb{width:32px;height:32px;border-radius:6px}
+  .nav-txt span:first-child{font-size:12.5px}
+  .nav-med-badge{font-size:8px;padding:1px 4px}
+  .nav-btn{padding:5px 6px;font-size:11px}
+  .nav-cta{padding:5px 8px;font-size:10.5px}
+  .hstat{flex:1 1 100%!important}
 }
 
 /* Assistant CNEF */
@@ -564,3 +617,59 @@ footer{background:var(--vert-f);padding:64px 5vw 28px}
 .deposit-card .file-item{background:var(--gris);border:1px solid var(--brd)}.deposit-card .file-item-name{color:var(--txt)}.deposit-card .file-item svg{stroke:var(--vert)!important}.deposit-card .file-item span:last-child{color:var(--txt3)!important}
 .deposit-card .form-error{color:#dc2626}
 @media(max-width:800px){.track-layout{grid-template-columns:1fr}.track-card,.track-help,.deposit-card{padding:22px}.track-steps{flex-direction:column;gap:10px}.track-steps li{text-align:left;display:flex;align-items:center;gap:10px}.track-steps li:not(:last-child):before{display:none}.track-steps i{margin:0}.track-result dl{grid-template-columns:1fr}.track-search-form>div:first-of-type{flex-direction:column}.track-search-form button{padding:12px}}
+
+/* ========================================================================= */
+/* ── PORTAIL OFFICIEL DE LA MÉDIATION FINANCIÈRE ──                         */
+/* ========================================================================= */
+
+/* Bandeau d'accroche défilant en continu (B.1 Accueil) */
+.med-ticker-wrap{width:100%;background:#022c22;border-bottom:1px solid rgba(232,163,23,.35);overflow:hidden;position:relative;display:flex;align-items:center;box-shadow:inset 0 -1px 0 rgba(255,255,255,.06)}
+.med-ticker-label{flex-shrink:0;background:var(--or);color:#0a2518;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:9px 18px;display:flex;align-items:center;gap:6px;z-index:2;box-shadow:2px 0 12px rgba(0,0,0,.3)}
+.med-ticker-track{display:flex;white-space:nowrap;animation:medTickerLoop 42s linear infinite}
+.med-ticker-track:hover{animation-play-state:paused}
+.med-ticker-item{display:inline-flex;align-items:center;gap:10px;padding:9px 24px;font-size:12.5px;color:#ecfdf5;font-weight:400}
+.med-ticker-sep{color:var(--or);font-weight:700}
+@keyframes medTickerLoop{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Cartes d'action rapide Accueil */
+.med-action-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%, 230px),1fr));gap:18px;margin-top:28px}
+.med-act-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:var(--rl);padding:24px 20px;color:#fff;text-decoration:none;transition:all .25s ease;display:flex;flex-direction:column;justify-content:space-between}
+.med-act-card:hover{background:rgba(255,255,255,.14);border-color:var(--or);transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.med-act-icon{width:42px;height:42px;border-radius:10px;background:var(--or);color:var(--vert-f);display:grid;place-items:center;margin-bottom:14px}
+.med-act-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2}
+.med-act-title{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:600;color:#fff;margin-bottom:6px}
+.med-act-desc{font-size:12.5px;color:rgba(255,255,255,.7);line-height:1.55}
+
+/* Sous-rubriques et onglets */
+.med-subnav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;padding-bottom:14px;border-bottom:1px solid var(--brd)}
+.med-subnav-btn{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:500;text-decoration:none;background:#fff;border:1px solid var(--gris-d);color:var(--txt2);transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.med-subnav-btn:hover,.med-subnav-btn.active{background:var(--vert);color:#fff;border-color:var(--vert)}
+
+/* FAQ Accordéon (B.3) */
+.med-faq-item{background:#fff;border:1px solid var(--brd);border-radius:var(--rl);margin-bottom:12px;overflow:hidden;transition:all .2s}
+.med-faq-item:hover{border-color:var(--vert)}
+.med-faq-q{width:100%;padding:18px 22px;background:none;border:none;text-align:left;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:15.5px;font-weight:600;color:var(--txt)}
+.med-faq-q svg{transition:transform .25s ease;flex-shrink:0;width:18px;height:18px;stroke:var(--vert)}
+.med-faq-item.open .med-faq-q svg{transform:rotate(180deg)}
+.med-faq-a{display:none;padding:0 22px 20px;font-size:13.5px;color:var(--txt2);line-height:1.75;border-top:1px solid var(--gris-m);padding-top:14px}
+.med-faq-item.open .med-faq-a{display:block}
+
+/* Établissements Adhérents (B.4) */
+.adherent-filter-bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
+.adh-filter-btn{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;border:1px solid var(--gris-d);color:var(--txt2);transition:all .2s}
+.adh-filter-btn.active{background:var(--vert);color:#fff;border-color:var(--vert)}
+.adh-card{background:#fff;border:1px solid var(--brd);border-radius:var(--rl);padding:22px 24px;transition:all .25s;display:flex;flex-direction:column;justify-content:space-between}
+.adh-card:hover{border-color:var(--vert);box-shadow:0 8px 25px rgba(5,150,105,.08);transform:translateY(-2px)}
+
+/* Fonds Documentaire (B.5) */
+.doc-card{background:#fff;border:1px solid var(--brd);border-radius:var(--rl);padding:22px;display:flex;align-items:flex-start;gap:18px;transition:all .25s}
+.doc-card:hover{border-color:var(--vert);box-shadow:0 8px 24px rgba(5,150,105,.08);transform:translateY(-2px)}
+.doc-icon{width:46px;height:46px;border-radius:10px;background:var(--vert-c);color:var(--vert);display:grid;place-items:center;flex-shrink:0}
+.doc-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2}
+.doc-meta{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--txt3);margin-top:10px;flex-wrap:wrap}
+
+/* Contacts Utiles (B.6) */
+.contact-office-card{background:#fff;border:1px solid var(--brd);border-radius:var(--rl);padding:28px;transition:all .25s}
+.contact-reg-card{background:#fff;border:1px solid var(--brd);border-radius:var(--rl);padding:20px;display:flex;align-items:center;gap:16px;transition:all .2s}
+.contact-reg-card:hover{border-color:var(--vert);box-shadow:0 6px 20px rgba(0,0,0,.04)}
+

@@ -57,6 +57,14 @@
             @endforeach
           </select>
         </div>
+
+        @if ($item instanceof \App\Models\MediationRequest)
+          <div class="afg" style="margin-bottom:18px">
+            <label class="afl">Observations du Médiateur (visibles par l’usager en suivi)</label>
+            <textarea name="observation_mediateur" class="afta" rows="4" placeholder="Indiquez ici les informations d'avancement, pièces complémentaires attendues ou motifs de décision...">{{ old('observation_mediateur', $item->observation_mediateur) }}</textarea>
+            <small style="display:block;font-size:11.5px;color:var(--txt3);margin-top:5px">Ces observations s'affichent en temps réel sur la page de suivi du demandeur.</small>
+          </div>
+        @endif
       @endif
       <button type="submit" class="abtn abtn-primary" style="width:100%;justify-content:center">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 13l4 4L19 7"/></svg>

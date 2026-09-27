@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class LocalizationTest extends TestCase
 {
+    use RefreshDatabase;
     public function test_french_is_the_default_public_locale(): void
     {
         $this->get('/')

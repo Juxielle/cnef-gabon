@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ChatbotController extends Controller
 {
     public function respond(Request $request): JsonResponse
     {
         $data = $request->validate(['message' => ['required', 'string', 'max:800']]);
-        $ascii = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $data['message']);
-        $message = strtolower($ascii === false ? $data['message'] : $ascii);
+        $message = Str::lower(Str::ascii($data['message']));
 
         $intents = [
+            [['suivre', 'suivi dossier', 'suivi mediation', 'etat dossier', 'code confidentiel', 'reference saisine'], "Vous pouvez suivre l’instruction de votre saisine de médiation en direct grâce à votre code confidentiel (format MF-YYYY-XXXXXX) sur l’espace dédié.", 'Suivre mon dossier', route('mediation.suivi')],
             [['mediation', 'litige', 'plainte', 'reclamation', 'fraude', 'compte bloque'], "La médiation financière du CNEF est un dispositif gratuit destiné à faciliter le règlement des litiges avec un établissement financier. Vous pouvez déposer une saisine en ligne et joindre jusqu’à 5 pièces justificatives. Une référence de suivi vous sera communiquée.", 'Déposer une saisine', route('mediation.index')],
             [['agrement', 'autorisation', 'licence', 'creer une banque', 'etablissement financier'], "Le CNEF instruit les dossiers d’agrément et transmet son avis à l’autorité compétente selon l’activité : COBAC, COSUMAF ou Ministère des Finances. La rubrique Agréments présente les catégories concernées et les étapes de la procédure.", 'Consulter les agréments', route('agrements.index')],
             [['reglement', 'loi', 'texte', 'cobac', 'cemac', 'cosumaf', 'cima', 'lbc', 'teg'], "La veille réglementaire rassemble les principaux textes applicables au secteur financier gabonais : règlements CNEF et COBAC, marchés financiers, assurances, LBC/FT et tarification.", 'Voir les textes', route('veille.index')],

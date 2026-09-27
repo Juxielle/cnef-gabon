@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             MediationKpiSeeder::class,
             MediationLitigeSeeder::class,
             MediationSaisineTrimestreSeeder::class,
+            MediationEtablissementSeeder::class,
         ]);
     }
 }

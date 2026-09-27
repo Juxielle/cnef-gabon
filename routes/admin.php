@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EtudeController;
 use App\Http\Controllers\Admin\LienUtileController;
 use App\Http\Controllers\Admin\MediateurCandidatureController;
+use App\Http\Controllers\Admin\MediationEtablissementController;
 use App\Http\Controllers\Admin\MediationKpiController;
 use App\Http\Controllers\Admin\MediationLitigeController;
 use App\Http\Controllers\Admin\MediationRequestController;
@@ -43,6 +44,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('mediation-kpis', MediationKpiController::class)->except(['show']);
         Route::resource('mediation-litiges', MediationLitigeController::class)->except(['show']);
         Route::resource('mediation-saisines', MediationSaisineTrimestreController::class)->except(['show']);
+        Route::resource('mediation-etablissements', MediationEtablissementController::class)->except(['show']);
 
         foreach ([
             'mediation-requests' => MediationRequestController::class,

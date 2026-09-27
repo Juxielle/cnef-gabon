@@ -81,6 +81,7 @@ class AdminBackofficeTest extends TestCase
             'mediation-kpis' => ['mediation-kpis'],
             'mediation-litiges' => ['mediation-litiges'],
             'mediation-saisines' => ['mediation-saisines'],
+            'mediation-etablissements' => ['mediation-etablissements'],
         ];
     }
 
@@ -123,6 +124,40 @@ class AdminBackofficeTest extends TestCase
 
         $this->delete(route('admin.acteurs.destroy', $acteur->id))->assertRedirect(route('admin.acteurs.index'));
         $this->assertDatabaseMissing(Acteur::class, ['id' => $acteur->id]);
+    }
+
+    public function test_mediation_etablissement_full_crud_lifecycle(): void
+    {
+        $this->actingAs(User::first());
+
+        $this->post('/admin/mediation-etablissements', [
+            'categorie' => 'Établissements de crédits',
+            'nom' => 'Nouvelle Banque Test',
+            'sigle' => 'NBT',
+            'actif' => '1',
+            'ordre' => 99,
+        ])->assertRedirect(route('admin.mediation-etablissements.index'));
+
+        $etab = \App\Models\MediationEtablissement::where('nom', 'Nouvelle Banque Test')->firstOrFail();
+
+        $this->get(route('admin.mediation-etablissements.edit', $etab->id))->assertStatus(200)->assertSee('Nouvelle Banque Test');
+
+        $this->put(route('admin.mediation-etablissements.update', $etab->id), [
+            'categorie' => 'Assurances',
+            'nom' => 'Nouvelle Assurance Modifiée',
+            'sigle' => 'NAM',
+            'actif' => '1',
+            'ordre' => 10,
+        ])->assertRedirect(route('admin.mediation-etablissements.index'));
+
+        $this->assertDatabaseHas(\App\Models\MediationEtablissement::class, [
+            'id' => $etab->id,
+            'nom' => 'Nouvelle Assurance Modifiée',
+            'categorie' => 'Assurances',
+        ]);
+
+        $this->delete(route('admin.mediation-etablissements.destroy', $etab->id))->assertRedirect(route('admin.mediation-etablissements.index'));
+        $this->assertDatabaseMissing(\App\Models\MediationEtablissement::class, ['id' => $etab->id]);
     }
 
     public function test_announcement_full_crud_lifecycle(): void
@@ -240,7 +275,7 @@ class AdminBackofficeTest extends TestCase
         $this->actingAs(User::first());
 
         $mediation = MediationRequest::create([
-            'reference' => 'MED-TEST-0001',
+            'reference' => 'MF-TEST-0001',
             'prenom' => 'Jean',
             'nom' => 'Test',
             'email' => 'jean@test.ga',
@@ -250,13 +285,19 @@ class AdminBackofficeTest extends TestCase
             'statut' => 'nouveau',
         ]);
 
-        $this->get('/admin/mediation-requests')->assertStatus(200)->assertSee('MED-TEST-0001');
+        $this->get('/admin/mediation-requests')->assertStatus(200)->assertSee('MF-TEST-0001');
         $this->get("/admin/mediation-requests/{$mediation->id}")->assertStatus(200)->assertSee('Jean');
 
-        $this->patch("/admin/mediation-requests/{$mediation->id}/status", ['statut' => 'en_cours'])
-            ->assertRedirect(route('admin.mediation-requests.show', $mediation->id));
+        $this->patch("/admin/mediation-requests/{$mediation->id}/status", [
+            'statut' => 'en_cours',
+            'observation_mediateur' => 'Demande d’explications envoyée à la banque.',
+        ])->assertRedirect(route('admin.mediation-requests.show', $mediation->id));
 
-        $this->assertDatabaseHas(MediationRequest::class, ['id' => $mediation->id, 'statut' => 'en_cours']);
+        $this->assertDatabaseHas(MediationRequest::class, [
+            'id' => $mediation->id,
+            'statut' => 'en_cours',
+            'observation_mediateur' => 'Demande d’explications envoyée à la banque.',
+        ]);
 
         $this->delete("/admin/mediation-requests/{$mediation->id}")->assertRedirect(route('admin.mediation-requests.index'));
         $this->assertDatabaseMissing(MediationRequest::class, ['id' => $mediation->id]);

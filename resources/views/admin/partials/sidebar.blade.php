@@ -76,6 +76,10 @@
       <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Candidatures médiateur <span class="admin-nav-count">{{ \App\Models\MediateurCandidature::count() }}</span>
     </a>
+    <a class="admin-nav-link {{ request()->routeIs('admin.mediation-etablissements.*') ? 'active' : '' }}" href="{{ route('admin.mediation-etablissements.index') }}">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11"/></svg>
+      Établissements assujettis <span class="admin-nav-count">{{ \App\Models\MediationEtablissement::count() }}</span>
+    </a>
 
     <div class="admin-nav-group">Communication</div>
     <a class="admin-nav-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}" href="{{ route('admin.messages.index') }}">

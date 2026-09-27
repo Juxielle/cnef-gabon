@@ -23,6 +23,7 @@ function positionDropdown(dd) {
   const trigger = dd.querySelector('.nav-dd-trigger');
   const menu = dd.querySelector('.nav-dd-menu');
   if (!trigger || !menu) return;
+  menu.style.maxWidth = Math.min(320, window.innerWidth - 16) + 'px';
   const r = trigger.getBoundingClientRect();
   const left = Math.max(8, Math.min(r.left, window.innerWidth - menu.offsetWidth - 8));
   menu.style.left = left + 'px';

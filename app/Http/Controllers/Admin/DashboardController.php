@@ -9,6 +9,7 @@ use App\Models\ContactMessage;
 use App\Models\Etude;
 use App\Models\LienUtile;
 use App\Models\MediateurCandidature;
+use App\Models\MediationEtablissement;
 use App\Models\MediationRequest;
 use App\Models\SecteurEconomique;
 use App\Models\TexteReglementaire;
@@ -21,6 +22,7 @@ class DashboardController extends Controller
     {
         $stats = [
             ['label' => 'Acteurs réglementés', 'value' => Acteur::count(), 'route' => 'admin.acteurs.index'],
+            ['label' => 'Établissements assujettis', 'value' => MediationEtablissement::count(), 'route' => 'admin.mediation-etablissements.index'],
             ['label' => 'Textes réglementaires', 'value' => TexteReglementaire::count(), 'route' => 'admin.textes.index'],
             ['label' => 'Études publiées', 'value' => Etude::count(), 'route' => 'admin.etudes.index'],
             ['label' => 'Secteurs baromètre', 'value' => SecteurEconomique::count(), 'route' => 'admin.secteurs.index'],
