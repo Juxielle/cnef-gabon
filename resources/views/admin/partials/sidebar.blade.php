@@ -55,36 +55,16 @@
       Indicateurs clés <span class="admin-nav-count">{{ \App\Models\BaroKpi::count() }}</span>
     </a>
 
-    <div class="admin-nav-group">Médiation financière</div>
-    <a class="admin-nav-link {{ request()->routeIs('admin.mediation-requests.*') ? 'active' : '' }}" href="{{ route('admin.mediation-requests.index') }}">
-      <svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l-3 6a3 3 0 006 0zM19 7l-3 6a3 3 0 006 0zM5 7h14"/></svg>
-      Saisines reçues <span class="admin-nav-count">{{ \App\Models\MediationRequest::count() }}</span>
-    </a>
-    <a class="admin-nav-link {{ request()->routeIs('admin.mediation-kpis.*') ? 'active' : '' }}" href="{{ route('admin.mediation-kpis.index') }}">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Statistiques litiges <span class="admin-nav-count">{{ \App\Models\MediationKpi::count() }}</span>
-    </a>
-    <a class="admin-nav-link {{ request()->routeIs('admin.mediation-litiges.*') ? 'active' : '' }}" href="{{ route('admin.mediation-litiges.index') }}">
-      <svg viewBox="0 0 24 24"><path d="M9 17V9m4 8V5m4 12v-6M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-      Nature des litiges <span class="admin-nav-count">{{ \App\Models\MediationLitige::count() }}</span>
-    </a>
-    <a class="admin-nav-link {{ request()->routeIs('admin.mediation-saisines.*') ? 'active' : '' }}" href="{{ route('admin.mediation-saisines.index') }}">
-      <svg viewBox="0 0 24 24"><path d="M3 3v18h18M7 15l4-4 3 3 5-6"/></svg>
-      Saisines / trimestre <span class="admin-nav-count">{{ \App\Models\MediationSaisineTrimestre::count() }}</span>
-    </a>
-    <a class="admin-nav-link {{ request()->routeIs('admin.candidatures.*') ? 'active' : '' }}" href="{{ route('admin.candidatures.index') }}">
-      <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-      Candidatures médiateur <span class="admin-nav-count">{{ \App\Models\MediateurCandidature::count() }}</span>
-    </a>
-    <a class="admin-nav-link {{ request()->routeIs('admin.mediation-etablissements.*') ? 'active' : '' }}" href="{{ route('admin.mediation-etablissements.index') }}">
-      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 7l9-4 9 4M4 10v11M20 10v11"/></svg>
-      Établissements assujettis <span class="admin-nav-count">{{ \App\Models\MediationEtablissement::count() }}</span>
-    </a>
-
     <div class="admin-nav-group">Communication</div>
     <a class="admin-nav-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}" href="{{ route('admin.messages.index') }}">
       <svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
       Messages de contact <span class="admin-nav-count">{{ \App\Models\ContactMessage::count() }}</span>
+    </a>
+
+    <div class="admin-nav-group">Médiation Financière</div>
+    <a class="admin-nav-link" href="{{ config('app.mediation_portal_url', 'http://cnef-mediation.test') }}/admin" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+      Portail Médiation (Back-office) ↗
     </a>
   </nav>
 

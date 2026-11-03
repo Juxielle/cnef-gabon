@@ -10,12 +10,6 @@ use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\EtudeController;
 use App\Http\Controllers\Admin\LienUtileController;
-use App\Http\Controllers\Admin\MediateurCandidatureController;
-use App\Http\Controllers\Admin\MediationEtablissementController;
-use App\Http\Controllers\Admin\MediationKpiController;
-use App\Http\Controllers\Admin\MediationLitigeController;
-use App\Http\Controllers\Admin\MediationRequestController;
-use App\Http\Controllers\Admin\MediationSaisineTrimestreController;
 use App\Http\Controllers\Admin\SecteurEconomiqueController;
 use App\Http\Controllers\Admin\TexteReglementaireController;
 use App\Http\Controllers\Admin\VeilleInnovationController;
@@ -41,15 +35,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('liens', LienUtileController::class)->except(['show']);
         Route::resource('secteurs', SecteurEconomiqueController::class)->except(['show']);
         Route::resource('baro-kpis', BaroKpiController::class)->except(['show']);
-        Route::resource('mediation-kpis', MediationKpiController::class)->except(['show']);
-        Route::resource('mediation-litiges', MediationLitigeController::class)->except(['show']);
-        Route::resource('mediation-saisines', MediationSaisineTrimestreController::class)->except(['show']);
-        Route::resource('mediation-etablissements', MediationEtablissementController::class)->except(['show']);
 
         foreach ([
-            'mediation-requests' => MediationRequestController::class,
             'messages' => ContactMessageController::class,
-            'candidatures' => MediateurCandidatureController::class,
             'agrement-dossiers' => AgrementDossierController::class,
         ] as $prefix => $controller) {
             Route::get($prefix, [$controller, 'index'])->name($prefix.'.index');

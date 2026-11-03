@@ -41,25 +41,8 @@ Route::get('/education-financiere', [EducationController::class, 'index'])->name
 Route::get('/actualites', [ActualiteController::class, 'index'])->name('actualites.index');
 Route::get('/liens-utiles', [LienUtileController::class, 'index'])->name('liens.index');
 
-Route::prefix('mediation-financiere')->name('mediation.')->group(function () {
-    // ── LES 6 RUBRIQUES OFFICIELLES DU PORTAIL NUMÉRIQUE ──
-    Route::get('/', [MediationController::class, 'index'])->name('index'); // B.1 Accueil
-    Route::get('/presentation', [MediationController::class, 'presentation'])->name('presentation'); // B.2 Présentation
-    Route::get('/recours-a-la-mediation', [MediationController::class, 'recours'])->name('recours'); // B.3 Recours à la médiation
-    Route::get('/etablissements-adherents', [MediationController::class, 'adherents'])->name('adherents'); // B.4 Établissements adhérents
-    Route::get('/fonds-documentaire', [MediationController::class, 'fondsDocumentaire'])->name('fonds-documentaire'); // B.5 Fonds documentaire
-    Route::get('/contacts-utiles', [MediationController::class, 'contacts'])->name('contacts'); // B.6 Contacts utiles
+// ── MÉDIATION FINANCIÈRE (PRÉSENTATION DU DISPOSITIF & REDIRECTION) ──
+Route::get('/mediation-financiere', [MediationController::class, 'index'])->name('mediation.index');
+Route::redirect('/mediation-financiere/{any}', '/mediation-financiere')->where('any', '.*');
 
-    // ── TRAITEMENT DES FLUX & DOSSIERS ──
-    Route::post('/saisine', [MediationController::class, 'storeSaisine'])->name('saisine.store');
-    Route::get('/suivi', [MediationController::class, 'suivi'])->name('suivi');
-    Route::post('/suivi', [MediationController::class, 'trackSuivi'])->middleware('throttle:30,1')->name('suivi.track');
-
-    // ── CANDIDATURE & COMPATIBILITÉ ASCENDANTE ──
-    Route::get('/candidature', [MediationController::class, 'candidature'])->name('candidature');
-    Route::post('/candidature', [MediationController::class, 'storeCandidature'])->name('candidature.store');
-    Route::get('/textes-reglementaires', [MediationController::class, 'textes'])->name('textes');
-    Route::get('/actualites', [MediationController::class, 'actualites'])->name('actualites');
-    Route::get('/activites', [MediationController::class, 'activites'])->name('activites');
-});
 

@@ -13,9 +13,12 @@ class ChatbotController extends Controller
         $data = $request->validate(['message' => ['required', 'string', 'max:800']]);
         $message = Str::lower(Str::ascii($data['message']));
 
+        $mediationUrl = config('app.mediation_portal_url', 'http://cnef-mediation.test');
+
         $intents = [
-            [['suivre', 'suivi dossier', 'suivi mediation', 'etat dossier', 'code confidentiel', 'reference saisine'], "Vous pouvez suivre l’instruction de votre saisine de médiation en direct grâce à votre code confidentiel (format MF-YYYY-XXXXXX) sur l’espace dédié.", 'Suivre mon dossier', route('mediation.suivi')],
-            [['mediation', 'litige', 'plainte', 'reclamation', 'fraude', 'compte bloque'], "La médiation financière du CNEF est un dispositif gratuit destiné à faciliter le règlement des litiges avec un établissement financier. Vous pouvez déposer une saisine en ligne et joindre jusqu’à 5 pièces justificatives. Une référence de suivi vous sera communiquée.", 'Déposer une saisine', route('mediation.index')],
+            [['suivre', 'suivi dossier', 'suivi mediation', 'etat dossier', 'code confidentiel', 'reference saisine'], "Le suivi des dossiers de médiation (format MF-YYYY-XXXXXX) s'effectue en direct sur le portail officiel de la Médiation Financière.", 'Suivre mon dossier', $mediationUrl.'/suivi'],
+            [['mediation', 'litige', 'plainte', 'reclamation', 'fraude', 'compte bloque'], "La médiation financière du CNEF est un dispositif gratuit destiné à faciliter le règlement amiable des litiges avec un établissement financier. Consultez notre page de présentation ou accédez au portail dédié.", 'Découvrir la médiation', route('mediation.index')],
+
             [['agrement', 'autorisation', 'licence', 'creer une banque', 'etablissement financier'], "Le CNEF instruit les dossiers d’agrément et transmet son avis à l’autorité compétente selon l’activité : COBAC, COSUMAF ou Ministère des Finances. La rubrique Agréments présente les catégories concernées et les étapes de la procédure.", 'Consulter les agréments', route('agrements.index')],
             [['reglement', 'loi', 'texte', 'cobac', 'cemac', 'cosumaf', 'cima', 'lbc', 'teg'], "La veille réglementaire rassemble les principaux textes applicables au secteur financier gabonais : règlements CNEF et COBAC, marchés financiers, assurances, LBC/FT et tarification.", 'Voir les textes', route('veille.index')],
             [['barometre', 'indicateur', 'economie', 'economique', 'statistique', 'secteur', 'pib'], "Le baromètre économique présente les indicateurs du Gabon et une lecture par secteur d’activité. Vous pouvez y consulter les KPI, tendances et données sectorielles disponibles.", 'Ouvrir le baromètre', route('barometre.index')],

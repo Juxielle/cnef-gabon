@@ -39,10 +39,11 @@
     <div class="admin-quick-ico"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
     <div><div class="admin-quick-t">Ajouter un texte</div><div class="admin-quick-d">Veille réglementaire</div></div>
   </a>
-  <a class="admin-quick" href="{{ route('admin.mediation-requests.index') }}">
-    <div class="admin-quick-ico"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 7l-3 6a3 3 0 006 0zM19 7l-3 6a3 3 0 006 0zM5 7h14"/></svg></div>
-    <div><div class="admin-quick-t">Traiter les saisines</div><div class="admin-quick-d">Médiation financière</div></div>
+  <a class="admin-quick" href="{{ route('admin.messages.index') }}">
+    <div class="admin-quick-ico"><svg viewBox="0 0 24 24"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg></div>
+    <div><div class="admin-quick-t">Messages reçus</div><div class="admin-quick-d">Formulaire de contact</div></div>
   </a>
 </div>
+
 
 @endsection

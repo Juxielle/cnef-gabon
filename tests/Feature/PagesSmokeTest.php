@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\ContactMessage;
 use App\Models\AgrementDossier;
-use App\Models\MediationRequest;
 use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -37,21 +36,7 @@ class PagesSmokeTest extends TestCase
             '/actualites?tab=veille',
             '/actualites?tab=veille&veille_categorie=ia',
             '/liens-utiles',
-            // 6 Rubriques Officielles de la Médiation Financière
-            '/mediation-financiere', // B.1 Accueil
-            '/mediation-financiere/presentation', // B.2 Présentation
-            '/mediation-financiere/recours-a-la-mediation', // B.3 Recours à la médiation
-            '/mediation-financiere/etablissements-adherents', // B.4 Établissements adhérents
-            '/mediation-financiere/fonds-documentaire', // B.5 Fonds documentaire
-            '/mediation-financiere/contacts-utiles', // B.6 Contacts utiles
-            // Routes de compatibilité et actions
-            '/mediation-financiere?tab=candidature',
-            '/mediation-financiere?tab=stats',
-            '/mediation-financiere/textes-reglementaires',
-            '/mediation-financiere/actualites',
-            '/mediation-financiere/activites',
-            '/mediation-financiere/candidature',
-            '/mediation-financiere/suivi',
+            '/mediation-financiere',
         ];
 
         foreach ($pages as $page) {
@@ -60,176 +45,110 @@ class PagesSmokeTest extends TestCase
         }
     }
 
-    public function test_mediation_section_displays_dedicated_menu_and_allows_returning_to_main_portal(): void
+    public function test_mediation_subpages_redirect_to_presentation_page(): void
     {
-        // Sur une page de médiation, le menu spécifique décline les 6 rubriques officielles
-        $response = $this->get('/mediation-financiere/presentation');
-        $response->assertOk();
-        $response->assertSee('aria-label="Navigation Médiation Financière"', false);
-        $response->assertSee('Portail CNEF');
-        $response->assertSee('Accueil');
-        $response->assertSee('Présentation');
-        $response->assertSee('Recours à la médiation');
-        $response->assertSee('Informations utiles');
-        $response->assertSee('Établissements adhérents');
-        $response->assertSee('Fonds documentaire');
-        $response->assertSee('Contacts utiles');
-        $response->assertSee('Saisir le Médiateur');
-        $response->assertDontSee('Baromètre éco.');
+        $redirectPages = [
+            '/mediation-financiere/presentation',
+            '/mediation-financiere/recours-a-la-mediation',
+            '/mediation-financiere/etablissements-adherents',
+            '/mediation-financiere/fonds-documentaire',
+            '/mediation-financiere/contacts-utiles',
+            '/mediation-financiere/suivi',
+            '/mediation-financiere/candidature',
+        ];
 
-        // Sur la page d'accueil principale, le menu général du CNEF est affiché
-        $homeResponse = $this->get('/');
-        $homeResponse->assertOk();
-        $homeResponse->assertSee('aria-label="Navigation principale CNEF"', false);
-        $homeResponse->assertSee('Baromètre éco.');
-        $homeResponse->assertSee('Médiation');
+        foreach ($redirectPages as $page) {
+            $this->get($page)->assertRedirect('/mediation-financiere');
+        }
     }
 
-    public function test_mediation_form_displays_official_establishment_groups(): void
+    public function test_mediation_page_displays_presentation_and_redirect_button(): void
     {
-        $response = $this->get('/mediation-financiere/recours-a-la-mediation');
+        $response = $this->get('/mediation-financiere');
         $response->assertOk();
-        $response->assertSee('Établissements de crédits');
-        $response->assertSee('AFG Bank');
-        $response->assertSee('Société de Garantie du Gabon (SGG)');
-        $response->assertSee('Établissements de Micro Finance (EMF)');
-        $response->assertSee('CECAG EMF');
-        $response->assertSee('Établissements de paiement');
-        $response->assertSee('AIRTEL MONEY');
-        $response->assertSee('Assurances');
-        $response->assertSee('BGFI ASSURANCE');
-        $response->assertSee('Intermédiaires marchés');
-        $response->assertSee('BGFIBourse');
-    }
-
-    public function test_adherents_page_displays_official_3_branches(): void
-    {
-        $response = $this->get('/mediation-financiere/etablissements-adherents');
-        $response->assertOk();
-        $response->assertSee('Branche 1');
-        $response->assertSee('Établissements de Crédit');
-        $response->assertSee('Branche 2');
-        $response->assertSee('Compagnies d’Assurance', false);
-        $response->assertSee('Branche 3');
-        $response->assertSee('Intermédiaires de Marché', false);
-        $response->assertSee('COBAC');
-        $response->assertSee('CIMA');
-        $response->assertSee('COSUMAF');
+        $response->assertSee('La Médiation Financière');
+        $response->assertSee('Décret N° 0121/PR/MEP');
+        $response->assertSee('Accéder au Portail Dédié de la Médiation');
+        $response->assertSee(config('app.mediation_portal_url', 'http://cnef-mediation.test'));
+        $response->assertSee('Baromètre éco.');
+        $response->assertSee('Médiation');
     }
 
     public function test_contact_form_stores_message(): void
     {
-        $response = $this->post('/contact', [
-            'nom' => 'Jean Test',
-            'email' => 'jean@test.ga',
-            'objet' => 'Question réglementaire',
-            'message' => 'Ceci est un message de test.',
-        ]);
+        $payload = [
+            'nom' => 'Jean Ondo',
+            'email' => 'jean.ondo@example.ga',
+            'objet' => 'Demande d’information sur la réglementation',
+            'message' => 'Bonjour, pouvez-vous m’indiquer la procédure d’agrément pour un établissement de paiement ?',
+        ];
 
+        $response = $this->post('/contact', $payload);
+
+        $response->assertSessionHasNoErrors();
         $response->assertRedirect();
         $response->assertSessionHas('success');
-        $this->assertDatabaseHas(ContactMessage::class, ['email' => 'jean@test.ga']);
+
+        $this->assertDatabaseHas(ContactMessage::class, [
+            'email' => 'jean.ondo@example.ga',
+            'objet' => 'Demande d’information sur la réglementation',
+            'traite' => false,
+        ]);
     }
 
     public function test_agrement_dossier_can_be_tracked_without_exposing_contact_data(): void
     {
-        AgrementDossier::create([
-            'reference' => 'AGR-20260822-ABC123', 'raison_sociale' => 'Acteur Test',
-            'type_agrement' => 'Établissement de crédit', 'nom_contact' => 'Jean Test',
-            'email' => 'secret@test.ga', 'telephone' => '+24100000000', 'statut' => 'instruction',
+        $dossier = AgrementDossier::create([
+            'reference' => 'AGR-2026-TEST01',
+            'raison_sociale' => 'Banque Gabonaise de Test',
+            'forme_juridique' => 'Société Anonyme (SA)',
+            'type_agrement' => 'etablissement_credit',
+            'nom_contact' => 'Jean-Pierre Ondo',
+            'email' => 'secret.demandeur@test.ga',
+            'telephone' => '+241 77 00 00 00',
+            'statut' => 'recevable',
+            'commentaire_suivi' => 'Dossier déclaré complet, transmis au Secrétariat Général de la COBAC.',
         ]);
 
-        $this->post('/suivi-agrement/recherche', ['reference' => 'agr-20260822-abc123'])
-            ->assertOk()->assertSee('En cours d’instruction')->assertDontSee('secret@test.ga');
+
+        $response = $this->post('/suivi-agrement/recherche', [
+            'reference' => 'AGR-2026-TEST01',
+        ]);
+
+        $response->assertOk();
+        $response->assertSee('AGR-2026-TEST01');
+        $response->assertSee('Dossier déclaré complet');
+        $response->assertDontSee('secret.demandeur@test.ga');
+        $response->assertDontSee('+241 77 00 00 00');
+
     }
 
     public function test_chatbot_returns_contextual_guidance(): void
     {
-        $this->postJson('/assistant/message', ['message' => 'Comment déposer une réclamation ?'])
-            ->assertOk()
-            ->assertJsonPath('action.label', 'Déposer une saisine')
-            ->assertJsonStructure(['answer', 'action' => ['label', 'url']]);
+        $response = $this->postJson('/assistant/message', [
+            'message' => 'Comment obtenir un agrément bancaire ?',
+        ]);
+
+        $response->assertOk();
+        $response->assertJsonStructure(['answer', 'action' => ['label', 'url']]);
+        $response->assertJsonPath('action.label', 'Consulter les agréments');
+        $response->assertJsonPath('action.url', route('agrements.index'));
     }
 
     public function test_chatbot_validates_empty_messages(): void
     {
-        $this->postJson('/assistant/message', ['message' => ''])->assertUnprocessable();
+        $response = $this->postJson('/assistant/message', [
+            'message' => '',
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonValidationErrors(['message']);
     }
 
     public function test_contact_form_validation_fails_on_missing_fields(): void
     {
         $response = $this->post('/contact', []);
+
         $response->assertSessionHasErrors(['nom', 'email', 'objet', 'message']);
-    }
-
-    public function test_mediation_saisine_stores_request(): void
-    {
-        \Illuminate\Support\Facades\Mail::fake();
-
-        $response = $this->post('/mediation-financiere/saisine', [
-            'prenom' => 'Marie',
-            'nom' => 'Obiang',
-            'email' => 'marie@test.ga',
-            'etablissement' => 'BGFI Bank Gabon',
-            'nature_litige' => 'Contestation de frais ou commission',
-            'description' => 'Description du litige de test.',
-        ]);
-
-        $response->assertRedirect();
-        $response->assertSessionHas('success');
-        $response->assertSessionHas('dossier_reference');
-        $this->assertDatabaseHas(MediationRequest::class, ['email' => 'marie@test.ga']);
-
-        \Illuminate\Support\Facades\Mail::assertSent(\App\Mail\MediationConfirmationMail::class, function ($mail) {
-            return $mail->hasTo('marie@test.ga') && str_starts_with($mail->saisine->reference, 'MF-');
-        });
-    }
-
-    public function test_mediateur_candidature_stores_application(): void
-    {
-        $response = $this->post('/mediation-financiere/candidature', [
-            'prenom' => 'Paul',
-            'nom' => 'Ngoua',
-            'email' => 'paul@test.ga',
-            'branche' => 'Branche 1 — Crédit, Microfinance & Paiement',
-        ]);
-
-        $response->assertRedirect();
-        $response->assertSessionHas('success');
-        $this->assertDatabaseHas(\App\Models\MediateurCandidature::class, ['email' => 'paul@test.ga']);
-    }
-
-    public function test_mediation_suivi_can_track_dossier_by_confidential_reference(): void
-    {
-        $dossier = MediationRequest::create([
-            'reference' => 'MF-2026-TEST99',
-            'prenom' => 'Alain',
-            'nom' => 'Mba',
-            'email' => 'alain@test.ga',
-            'etablissement' => 'BGFI Bank Gabon',
-            'nature_litige' => 'Frais bancaires et agios contestés',
-            'description' => 'Contestation de frais prélevés à tort.',
-            'statut' => 'recevable',
-            'observation_mediateur' => 'Le dossier a été transmis à la banque pour contradictoire.',
-        ]);
-
-        // Recherche par URL query string
-        $this->get('/mediation-financiere/suivi?reference=MF-2026-TEST99')
-            ->assertOk()
-            ->assertSee('MF-2026-TEST99')
-            ->assertSee('Dossier déclaré recevable')
-            ->assertSee('BGFI Bank Gabon')
-            ->assertSee('Le dossier a été transmis à la banque pour contradictoire.');
-
-        // Recherche par formulaire POST
-        $this->post('/mediation-financiere/suivi', ['reference' => 'MF-2026-TEST99'])
-            ->assertOk()
-            ->assertSee('MF-2026-TEST99')
-            ->assertSee('Dossier déclaré recevable');
-
-        // Référence introuvable
-        $this->post('/mediation-financiere/suivi', ['reference' => 'MF-INEXISTANT'])
-            ->assertOk()
-            ->assertSee('Aucun dossier trouvé');
     }
 }

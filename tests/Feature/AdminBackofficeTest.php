@@ -78,12 +78,9 @@ class AdminBackofficeTest extends TestCase
             'liens' => ['liens'],
             'secteurs' => ['secteurs'],
             'baro-kpis' => ['baro-kpis'],
-            'mediation-kpis' => ['mediation-kpis'],
-            'mediation-litiges' => ['mediation-litiges'],
-            'mediation-saisines' => ['mediation-saisines'],
-            'mediation-etablissements' => ['mediation-etablissements'],
         ];
     }
+
 
     /** @dataProvider crudResources */
     public function test_crud_index_and_create_pages_load(string $resource): void
@@ -126,41 +123,8 @@ class AdminBackofficeTest extends TestCase
         $this->assertDatabaseMissing(Acteur::class, ['id' => $acteur->id]);
     }
 
-    public function test_mediation_etablissement_full_crud_lifecycle(): void
-    {
-        $this->actingAs(User::first());
-
-        $this->post('/admin/mediation-etablissements', [
-            'categorie' => 'Établissements de crédits',
-            'nom' => 'Nouvelle Banque Test',
-            'sigle' => 'NBT',
-            'actif' => '1',
-            'ordre' => 99,
-        ])->assertRedirect(route('admin.mediation-etablissements.index'));
-
-        $etab = \App\Models\MediationEtablissement::where('nom', 'Nouvelle Banque Test')->firstOrFail();
-
-        $this->get(route('admin.mediation-etablissements.edit', $etab->id))->assertStatus(200)->assertSee('Nouvelle Banque Test');
-
-        $this->put(route('admin.mediation-etablissements.update', $etab->id), [
-            'categorie' => 'Assurances',
-            'nom' => 'Nouvelle Assurance Modifiée',
-            'sigle' => 'NAM',
-            'actif' => '1',
-            'ordre' => 10,
-        ])->assertRedirect(route('admin.mediation-etablissements.index'));
-
-        $this->assertDatabaseHas(\App\Models\MediationEtablissement::class, [
-            'id' => $etab->id,
-            'nom' => 'Nouvelle Assurance Modifiée',
-            'categorie' => 'Assurances',
-        ]);
-
-        $this->delete(route('admin.mediation-etablissements.destroy', $etab->id))->assertRedirect(route('admin.mediation-etablissements.index'));
-        $this->assertDatabaseMissing(\App\Models\MediationEtablissement::class, ['id' => $etab->id]);
-    }
-
     public function test_announcement_full_crud_lifecycle(): void
+
     {
         $this->actingAs(User::first());
 
@@ -270,39 +234,6 @@ class AdminBackofficeTest extends TestCase
         ])->assertSessionHasErrors('icone_svg');
     }
 
-    public function test_mediation_request_submission_management(): void
-    {
-        $this->actingAs(User::first());
-
-        $mediation = MediationRequest::create([
-            'reference' => 'MF-TEST-0001',
-            'prenom' => 'Jean',
-            'nom' => 'Test',
-            'email' => 'jean@test.ga',
-            'etablissement' => 'BGFI Bank Gabon',
-            'nature_litige' => 'Contestation de frais ou commission',
-            'description' => 'Litige de test.',
-            'statut' => 'nouveau',
-        ]);
-
-        $this->get('/admin/mediation-requests')->assertStatus(200)->assertSee('MF-TEST-0001');
-        $this->get("/admin/mediation-requests/{$mediation->id}")->assertStatus(200)->assertSee('Jean');
-
-        $this->patch("/admin/mediation-requests/{$mediation->id}/status", [
-            'statut' => 'en_cours',
-            'observation_mediateur' => 'Demande d’explications envoyée à la banque.',
-        ])->assertRedirect(route('admin.mediation-requests.show', $mediation->id));
-
-        $this->assertDatabaseHas(MediationRequest::class, [
-            'id' => $mediation->id,
-            'statut' => 'en_cours',
-            'observation_mediateur' => 'Demande d’explications envoyée à la banque.',
-        ]);
-
-        $this->delete("/admin/mediation-requests/{$mediation->id}")->assertRedirect(route('admin.mediation-requests.index'));
-        $this->assertDatabaseMissing(MediationRequest::class, ['id' => $mediation->id]);
-    }
-
     public function test_contact_message_boolean_status(): void
     {
         $this->actingAs(User::first());
@@ -321,25 +252,5 @@ class AdminBackofficeTest extends TestCase
 
         $this->assertDatabaseHas(ContactMessage::class, ['id' => $message->id, 'traite' => true]);
     }
-
-    public function test_mediateur_candidature_submission_management(): void
-    {
-        $this->actingAs(User::first());
-
-        $candidature = MediateurCandidature::create([
-            'prenom' => 'Paul',
-            'nom' => 'Test',
-            'email' => 'paul@test.ga',
-            'branche' => 'Branche 1',
-            'statut' => 'recue',
-        ]);
-
-        $this->get('/admin/candidatures')->assertStatus(200)->assertSee('Paul');
-        $this->get("/admin/candidatures/{$candidature->id}")->assertStatus(200);
-
-        $this->patch("/admin/candidatures/{$candidature->id}/status", ['statut' => 'en_examen'])
-            ->assertRedirect(route('admin.candidatures.show', $candidature->id));
-
-        $this->assertDatabaseHas(MediateurCandidature::class, ['id' => $candidature->id, 'statut' => 'en_examen']);
-    }
 }
+

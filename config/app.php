@@ -54,6 +54,9 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'mediation_portal_url' => env('MEDIATION_PORTAL_URL', 'http://cnef-mediation.test'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
