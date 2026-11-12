@@ -10,11 +10,9 @@
   border-radius:6px;overflow:hidden;
   box-shadow:0 4px 16px rgba(0,0,0,.22);
   border:1px solid rgba(255,255,255,.18);
-  width:40px;
+  width:60px;
 ">
-  <div style="height:12px;background:#009A44"></div>
-  <div style="height:12px;background:#FCD116"></div>
-  <div style="height:12px;background:#003189"></div>
+  <img src="{{ asset('assets/images/drapeau-gab.gif') }}" alt="Drapeau gabonais animé" style="display:block;width:100%;height:auto">
 </div>
 
 @if ($annonces->isNotEmpty())
