@@ -17,6 +17,7 @@ class HomeController extends Controller
         ];
 
         $slides = [
+            ['image' => 'mediation-imag.jpeg', 'alt' => 'Photo de groupe des participants devant un bâtiment', 'tag' => 'CNEF Gabon — Médiation financière'],
             ['image' => 'image3.jpeg', 'alt' => 'Siège de la Banque des États de l\'Afrique Centrale (BEAC)', 'tag' => 'Siège de la BEAC'],
             ['image' => 'epargne-croissance.jpg', 'alt' => 'Jeunes pousses sur des piles de pièces symbolisant l’épargne et la croissance', 'tag' => 'Épargne et croissance économique'],
         ];
